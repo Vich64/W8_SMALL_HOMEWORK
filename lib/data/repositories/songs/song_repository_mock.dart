@@ -44,14 +44,26 @@ class SongRepositoryMock implements SongRepository {
     return _songs;
   }
 
+ 
   @override
   Future<Song?> fetchSongById(String id) async {
     // - Simulate a delay of 3 seconds.
+    await Future.delayed(const Duration(seconds: 3));
 
     // - After the delay : Find the song of given id in the list of songs and return it
+    Song? foundSong;
+    for (final song in _songs) {
+      if (song.id == id) {
+        foundSong = song;
+        break;
+      }
+    }
 
     // - If not found : Throw an error with the message “no song found for id 25 in the database"
+    if (foundSong == null) {
+      throw Exception('no song found for id $id in the database');
+    }
 
-    return Future.delayed(Duration.zero); // TO CHANGE !
+    return foundSong;
   }
 }
